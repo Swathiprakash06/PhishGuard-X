@@ -1,0 +1,379 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header {% if result.is_phishing %}bg-danger{% else %}bg-success{% endif %} text-white">
+                    <h2 class="h4 mb-0">
+                        {% if result.is_phishing %}
+                            <i class="fas fa-exclamation-triangle me-2"></i>Phishing Detected!
+                        {% else %}
+                            <i class="fas fa-shield-alt me-2"></i>URL Appears Safe
+                        {% endif %}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h3 class="h5">Analyzed URL:</h3>
+                        <div class="p-3 bg-secondary bg-opacity-10 rounded">
+                            <a href="{{ result.url }}" target="_blank" class="text-break">{{ result.url }}</a>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h4 class="h5 mb-3">Confidence Score</h4>
+                                    <div class="progress mb-3" style="height: 25px;">
+                                        <div class="progress-bar {% if result.is_phishing %}bg-danger{% else %}bg-success{% endif %}" 
+                                             role="progressbar" 
+                                             style="width: {{ (result.confidence * 100)|round }}%;" 
+                                             aria-valuenow="{{ (result.confidence * 100)|round }}" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100">
+                                            {{ (result.confidence * 100)|round }}%
+                                        </div>
+                                    </div>
+                                    <p class="mb-0">
+                                        {% if result.is_phishing %}
+                                        Our model is {{ (result.confidence * 100)|round }}% confident this is a phishing URL
+                                        {% else %}
+                                        Our model is {{ ((1 - result.confidence) * 100)|round }}% confident this is a legitimate URL
+                                        {% endif %}
+                                    </p>
+                                    <p class="mt-2 small text-muted">
+                                        Detection threshold: {{ (result.threshold * 100)|round }}%
+                                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" 
+                                           title="URLs with confidence scores above this threshold are classified as phishing."></i>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h4 class="h5 mb-3">Detection Result</h4>
+                                    {% if result.is_phishing %}
+                                    <div class="alert alert-danger mb-3" role="alert">
+                                        <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                                        <p class="mb-0">This URL shows characteristics of a phishing website.</p>
+                                    </div>
+                                    <p class="mb-0 text-danger fw-bold">DO NOT share any personal information or credentials!</p>
+                                    {% else %}
+                                        {% if result.whitelisted %}
+                                        <div class="alert alert-info mb-3" role="alert">
+                                            <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                                            <p class="mb-0">This URL belongs to a trusted domain on our whitelist.</p>
+                                        </div>
+                                        <p class="mb-0 text-info">This is a known legitimate website.</p>
+                                        <p class="small text-muted mt-2">
+                                            <i class="fas fa-info-circle me-1"></i>This domain is pre-verified as safe.
+                                        </p>
+                                        {% else %}
+                                        <div class="alert alert-success mb-3" role="alert">
+                                            <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                            <p class="mb-0">No phishing indicators detected in this URL.</p>
+                                        </div>
+                                        <p class="mb-0 text-success">This URL appears to be legitimate.</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Feature Visualization -->
+                    {% if result.whitelisted %}
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Domain Information</h3>
+                        <div class="alert alert-info">
+                            <p class="mb-0">
+                                <i class="fas fa-shield-alt me-2"></i>
+                                This domain is on our trusted whitelist, so detailed feature analysis was skipped.
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h4 class="h6 mb-3">Whitelist Information</h4>
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Domain
+                                                <span class="badge bg-info rounded-pill">
+                                                    {{ result.features.domain }}
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Uses HTTPS
+                                                <span class="badge bg-success rounded-pill">
+                                                    {{ 'Yes' if result.features.has_https == 1 else 'No' }}
+                                                </span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Trust Level
+                                                <span class="badge bg-info rounded-pill">
+                                                    High
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h4 class="h6 mb-3">About Whitelisting</h4>
+                                        <p>Our system maintains a list of verified legitimate domains to provide instant verification for common services.</p>
+                                        <p class="small text-muted">Whitelisted domains bypass the ML analysis because they're known to be legitimate.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Feature Analysis</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="h6 mb-3">Model Contribution</h4>
+                                        <canvas id="modelContribution" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="h6 mb-3">Key Features Detected</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Feature</th>
+                                                        <th>Value</th>
+                                                        <th>Impact</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% set high_impact_features = [
+                                                        ('url_length', 'URL Length', result.features.url_length > 75),
+                                                        ('has_ip_address', 'Contains IP Address', result.features.has_ip_address == 1),
+                                                        ('has_at_symbol', 'Contains @ Symbol', result.features.has_at_symbol == 1),
+                                                        ('has_suspicious_words', 'Suspicious Words', result.features.has_suspicious_words == 1),
+                                                        ('has_double_slash', 'Double Slash Redirect', result.features.has_double_slash == 1),
+                                                        ('domain_has_numbers', 'Domain Has Numbers', result.features.domain_has_numbers == 1),
+                                                        ('has_https', 'Uses HTTPS', result.features.has_https == 1),
+                                                        ('tiny_url', 'Is Shortened URL', result.features.tiny_url == 1)
+                                                    ] %}
+                                                    
+                                                    {% for key, name, is_risky in high_impact_features %}
+                                                        <tr>
+                                                            <td>{{ name }}</td>
+                                                            <td>
+                                                                {% if key in ['url_length'] %}
+                                                                    {{ result.features[key] }}
+                                                                {% else %}
+                                                                    {{ 'Yes' if result.features[key] == 1 else 'No' }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if is_risky %}
+                                                                    <span class="badge bg-danger">High</span>
+                                                                {% else %}
+                                                                    <span class="badge bg-secondary">Low</span>
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Additional Statistics -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            {% if result.whitelisted %}
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h4 class="h6 mb-3">URL Components</h4>
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Protocol
+                                            <span class="badge bg-secondary rounded-pill">
+                                                {{ 'HTTPS' if result.features.has_https == 1 else 'HTTP' }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Domain
+                                            <span class="badge bg-info rounded-pill text-truncate" style="max-width: 150px;">
+                                                {{ result.features.domain }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Status
+                                            <span class="badge bg-info rounded-pill">
+                                                Whitelisted
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h4 class="h6 mb-3">URL Structure</h4>
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Domain Length
+                                            <span class="badge {% if result.features.domain_length > 20 %}bg-warning{% else %}bg-secondary{% endif %} rounded-pill">
+                                                {{ result.features.domain_length }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Number of Dots
+                                            <span class="badge {% if result.features.num_dots > 3 %}bg-warning{% else %}bg-secondary{% endif %} rounded-pill">
+                                                {{ result.features.num_dots }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Number of Hyphens
+                                            <span class="badge {% if result.features.num_hyphens > 1 %}bg-warning{% else %}bg-secondary{% endif %} rounded-pill">
+                                                {{ result.features.num_hyphens }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Path Length
+                                            <span class="badge {% if result.features.path_length > 20 %}bg-warning{% else %}bg-secondary{% endif %} rounded-pill">
+                                                {{ result.features.path_length }}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="h6 mb-3">Safety Recommendations</h4>
+                                    {% if result.is_phishing %}
+                                    <div class="alert alert-danger" role="alert">
+                                        <h5 class="alert-heading">Warning!</h5>
+                                        <p>This URL was identified as a potential phishing attempt. We recommend:</p>
+                                        <ul>
+                                            <li>Do not enter any personal information</li>
+                                            <li>Do not download files from this site</li>
+                                            <li>Report the URL to your IT department</li>
+                                            <li>Close the website immediately</li>
+                                        </ul>
+                                    </div>
+                                    {% elif result.whitelisted %}
+                                    <div class="alert alert-info" role="alert">
+                                        <h5 class="alert-heading">Trusted Domain!</h5>
+                                        <p>This domain is on our trusted whitelist. Still, follow these best practices:</p>
+                                        <ul>
+                                            <li>Verify you're on the correct subdomain</li>
+                                            <li>Check for a valid SSL certificate (lock icon)</li>
+                                            <li>Be cautious with any unexpected requests</li>
+                                        </ul>
+                                    </div>
+                                    {% else %}
+                                    <div class="alert alert-success" role="alert">
+                                        <h5 class="alert-heading">Safe to proceed!</h5>
+                                        <p>This URL appears to be legitimate, but always maintain caution:</p>
+                                        <ul>
+                                            <li>Verify the website has a valid SSL certificate</li>
+                                            <li>Confirm the website is what you expected</li>
+                                            <li>Be cautious when sharing personal information</li>
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>Scan Another URL
+                        </a>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary ms-2">
+                            <i class="fas fa-chart-line me-2"></i>View Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Model contribution chart - only for non-whitelisted URLs
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if not result.whitelisted %}
+        var modelContribution = document.getElementById('modelContribution');
+        if (modelContribution) {
+            var ctx = modelContribution.getContext('2d');
+            
+            // Get confidence values from the result
+            var rfConfidence = {{ result.rf_confidence }};
+            var lstmConfidence = {{ result.lstm_confidence }};
+            
+            // Calculate the effective contribution of each model
+            var total = rfConfidence + lstmConfidence;
+            var rfContribution = total > 0 ? (rfConfidence / total) * 100 : 50;
+            var lstmContribution = total > 0 ? (lstmConfidence / total) * 100 : 50;
+            
+            var modelChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Random Forest', 'LSTM Network'],
+                    datasets: [{
+                        data: [rfContribution, lstmContribution],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 159, 64, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.label || '';
+                                    var value = context.raw || 0;
+                                    return label + ': ' + value.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        {% endif %}
+    });
+</script>
+{% endblock %}

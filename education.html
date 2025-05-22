@@ -1,0 +1,320 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <h1 class="h2">Phishing Education Center</h1>
+            <p class="lead">Learn how to identify and protect yourself from phishing attacks</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                <i class="fas fa-search me-2"></i>Scan a URL
+            </a>
+        </div>
+    </div>
+    
+    <!-- Phishing Overview Section -->
+    <div class="row mb-5">
+        <div class="col-lg-6 order-lg-2">
+            <img src="https://library.siam-legal.com/wp-content/uploads/2024/10/phishing-scams-in-thailand.webp" alt="Phishing Attack Graphic" class="img-fluid rounded shadow mb-3">
+        </div>
+        <div class="col-lg-6 order-lg-1">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">What is Phishing?</h2>
+                    <p>Phishing is a type of social engineering attack often used to steal user data, including login credentials and credit card numbers. It occurs when an attacker, masquerading as a trusted entity, dupes a victim into opening an email, instant message, or text message.</p>
+                    
+                    <p>The recipient is then tricked into clicking a malicious link, which can lead to:</p>
+                    <ul>
+                        <li>Installation of malware</li>
+                        <li>Freezing of the system as part of a ransomware attack</li>
+                        <li>Revealing of sensitive information</li>
+                        <li>Theft of personal or financial data</li>
+                    </ul>
+                    
+                    <p>Phishing attacks continue to evolve in sophistication, making them increasingly difficult to detect without proper tools and education.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Common Types of Phishing Section -->
+    <div class="row mb-5">
+        <div class="col-12 mb-4">
+            <h2 class="h3">Common Types of Phishing Attacks</h2>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Email Phishing</h3>
+                    <p>The most common type where attackers send emails pretending to be from legitimate companies requesting sensitive information.</p>
+                    <h4 class="h6 mt-3">Warning Signs:</h4>
+                    <ul>
+                        <li>Poor spelling and grammar</li>
+                        <li>Mismatched or suspicious URLs</li>
+                        <li>Requests for personal information</li>
+                        <li>Sense of urgency or threats</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Spear Phishing</h3>
+                    <p>Targeted attacks directed at specific individuals or companies, usually using personalized information to appear more legitimate.</p>
+                    <h4 class="h6 mt-3">Warning Signs:</h4>
+                    <ul>
+                        <li>Contains personal information about you</li>
+                        <li>Appears to come from someone you know</li>
+                        <li>Asks for specific company information</li>
+                        <li>Uses sophisticated, personalized content</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Pharming</h3>
+                    <p>Redirects users from legitimate websites to fraudulent ones that mimic the appearance of the original site.</p>
+                    <h4 class="h6 mt-3">Warning Signs:</h4>
+                    <ul>
+                        <li>Sudden change in website appearance</li>
+                        <li>Missing HTTPS secure connection</li>
+                        <li>Subtle URL differences</li>
+                        <li>Unusual requests for login credentials</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Smishing (SMS Phishing)</h3>
+                    <p>Uses text messages to trick users into revealing personal information or installing malware.</p>
+                    <h4 class="h6 mt-3">Warning Signs:</h4>
+                    <ul>
+                        <li>Unknown senders with urgent messages</li>
+                        <li>Requests to click on shortened links</li>
+                        <li>Offers that seem too good to be true</li>
+                        <li>Messages claiming to be from banks or government</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Vishing (Voice Phishing)</h3>
+                    <p>Uses phone calls to trick victims into revealing sensitive information over the phone.</p>
+                    <h4 class="h6 mt-3">Warning Signs:</h4>
+                    <ul>
+                        <li>Callers creating urgency or fear</li>
+                        <li>Requests for personal information</li>
+                        <li>Caller ID spoofing</li>
+                        <li>Robotic or scripted-sounding voices</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Clone Phishing</h3>
+                    <p>Replicates a legitimate email with malicious links or attachments, often claiming to be an updated version.</p>
+                    <h4 class="h6 mt-3">Warning Signs:</h4>
+                    <ul>
+                        <li>Duplicate emails with slight differences</li>
+                        <li>"Updated" or "Revised" version claims</li>
+                        <li>Different sender email address</li>
+                        <li>Unexpected attachments or links</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- How to Identify Phishing URLs Section -->
+    <div class="row mb-5">
+        <div class="col-12 mb-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h2 class="h3">How to Identify Phishing URLs</h2>
+                    <p class="mb-0">Learning to spot suspicious URLs is one of the most effective ways to protect yourself</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">Red Flags in URLs</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                            <strong>Misspelled Domain Names</strong>
+                            <p class="mb-0 mt-1 text-muted">Example: <code>amaz0n.com</code> or <code>paypa1.com</code></p>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                            <strong>Suspicious Subdomains</strong>
+                            <p class="mb-0 mt-1 text-muted">Example: <code>paypal.secure-login.com</code> (where secure-login.com is the actual domain)</p>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                            <strong>IP Addresses Instead of Domain Names</strong>
+                            <p class="mb-0 mt-1 text-muted">Example: <code>http://192.168.1.1/login.php</code></p>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                            <strong>Excessive Subdomains</strong>
+                            <p class="mb-0 mt-1 text-muted">Example: <code>login.secure.server.domain.example.com</code></p>
+                        </li>
+                        <li class="list-group-item">
+                            <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                            <strong>URL Shorteners</strong>
+                            <p class="mb-0 mt-1 text-muted">Example: <code>bit.ly/3xF5</code> (hiding the actual destination)</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mt-4 mt-lg-0">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">URL Structure Example</h3>
+                </div>
+                <div class="card-body">
+                    <img src="https://miro.medium.com/v2/resize:fit:1400/1*cih496PZ5DyEubgfYUq3Zw.png" alt="Phishing URL Structure" class="img-fluid rounded mb-3">
+                    
+                    <h4 class="h6">Anatomy of a URL:</h4>
+                    <pre class="bg-secondary bg-opacity-10 p-3 rounded">https://subdomain.example.com:443/path/page.html?query=value#section</pre>
+                    
+                    <ul class="list-unstyled mt-3">
+                        <li><strong>Protocol:</strong> https://</li>
+                        <li><strong>Subdomain:</strong> subdomain</li>
+                        <li><strong>Domain name:</strong> example.com (the actual website)</li>
+                        <li><strong>Port:</strong> :443</li>
+                        <li><strong>Path:</strong> /path/page.html</li>
+                        <li><strong>Query parameters:</strong> ?query=value</li>
+                        <li><strong>Fragment:</strong> #section</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">Security Checks</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h4 class="h6"><i class="fas fa-lock text-success me-2"></i>Check for HTTPS</h4>
+                        <p class="mb-0 text-muted">Legitimate websites typically use HTTPS protocol, indicated by a padlock icon in your browser.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h4 class="h6"><i class="fas fa-certificate text-success me-2"></i>Verify SSL Certificate</h4>
+                        <p class="mb-0 text-muted">Click the padlock icon to check if the certificate is valid and issued to the correct organization.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="h6"><i class="fas fa-search text-success me-2"></i>Use Our Scanner</h4>
+                        <p class="mb-0 text-muted">When in doubt, use our phishing URL detector to analyze suspicious links.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Protection Strategies Section -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h2 class="h3">Protection Strategies</h2>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">For Individuals</h3>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li class="mb-2">
+                            <strong>Be skeptical of unsolicited communications</strong>
+                            <p class="text-muted mb-0">Verify the sender's identity before responding to requests.</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Check URLs before clicking</strong>
+                            <p class="text-muted mb-0">Hover over links to see the actual destination.</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Use multi-factor authentication</strong>
+                            <p class="text-muted mb-0">Add an extra layer of security to your accounts.</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Keep software updated</strong>
+                            <p class="text-muted mb-0">Install security patches as soon as they're available.</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Use phishing detection tools</strong>
+                            <p class="text-muted mb-0">Employ browser extensions and security software that can identify potential threats.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">For Organizations</h3>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li class="mb-2">
+                            <strong>Conduct regular security awareness training</strong>
+                            <p class="text-muted mb-0">Educate employees about phishing techniques and prevention.</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Implement email filtering solutions</strong>
+                            <p class="text-muted mb-0">Filter suspicious emails before they reach employee inboxes.</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Use DMARC, SPF, and DKIM</strong>
+                            <p class="text-muted mb-0">Implement email authentication protocols to prevent spoofing.</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Conduct phishing simulations</strong>
+                            <p class="text-muted mb-0">Test employee awareness with simulated phishing campaigns.</p>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Create clear reporting procedures</strong>
+                            <p class="text-muted mb-0">Establish protocols for reporting suspected phishing attempts.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h3 class="h5" style="color: black;">Remember:</h3>
+                    <p class="mb-0" style="color: black;">If you're unsure about a URL, use our <a href="{{ url_for('index') }}" style="color: rgb(226, 30, 30);">phishing detection tool</a> to analyze it before clicking. It's always better to be cautious than to become a victim of a phishing attack.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

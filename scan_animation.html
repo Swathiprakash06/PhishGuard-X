@@ -1,0 +1,437 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>URL Analysis in Progress
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4 text-center">
+                        <h3 class="h5">Analyzing URL:</h3>
+                        <div class="p-3 bg-secondary bg-opacity-10 rounded mb-4">
+                            <span class="text-break">{{ url }}</span>
+                        </div>
+                        
+                        <div id="analysis-animation" class="mb-4">
+                            <div class="progress mb-3" style="height: 25px;">
+                                <div id="scan-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" 
+                                     style="width: 0%;" 
+                                     aria-valuenow="0" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                    0%
+                                </div>
+                            </div>
+                            
+                            <div id="status-message" class="mb-3">
+                                <p class="mb-2 text-center"><span id="current-stage">Initializing scan...</span></p>
+                            </div>
+                            
+                            <div id="analysis-stages">
+                                <div class="card mb-3">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-center">
+                                            <div id="stage1-icon" class="me-3">
+                                                <i class="fas fa-circle-notch fa-spin text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="h6 mb-1">Domain Analysis</h5>
+                                                <p class="mb-0 small text-muted">Checking domain reputation and structure</p>
+                                            </div>
+                                            <div id="stage1-result" class="ms-auto">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-3">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-center">
+                                            <div id="stage2-icon" class="me-3">
+                                                <i class="fas fa-circle text-secondary"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="h6 mb-1">URL Structure</h5>
+                                                <p class="mb-0 small text-muted">Examining URL for suspicious patterns</p>
+                                            </div>
+                                            <div id="stage2-result" class="ms-auto">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-3">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-center">
+                                            <div id="stage3-icon" class="me-3">
+                                                <i class="fas fa-circle text-secondary"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="h6 mb-1">Content Verification</h5>
+                                                <p class="mb-0 small text-muted">Checking for suspicious content indicators</p>
+                                            </div>
+                                            <div id="stage3-result" class="ms-auto">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-3">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-center">
+                                            <div id="stage4-icon" class="me-3">
+                                                <i class="fas fa-circle text-secondary"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="h6 mb-1">AI Model Analysis</h5>
+                                                <p class="mb-0 small text-muted">Running advanced machine learning analysis</p>
+                                            </div>
+                                            <div id="stage4-result" class="ms-auto">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-center">
+                                            <div id="stage5-icon" class="me-3">
+                                                <i class="fas fa-circle text-secondary"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="h6 mb-1">Final Assessment</h5>
+                                                <p class="mb-0 small text-muted">Computing final threat score</p>
+                                            </div>
+                                            <div id="stage5-result" class="ms-auto">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="results-container" style="display:none;">
+                            <div class="alert" id="result-alert" role="alert">
+                                <h4 class="alert-heading" id="result-heading"></h4>
+                                <p id="result-message"></p>
+                            </div>
+                            
+                            <div class="d-flex justify-content-center mt-4">
+                                <a href="#" id="view-details-btn" class="btn btn-primary me-2">
+                                    <i class="fas fa-chart-bar me-1"></i>View Full Analysis
+                                </a>
+                                <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                                    <i class="fas fa-search me-1"></i>Scan Another URL
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const url = "{{ url }}";
+        const progressBar = document.getElementById('scan-progress-bar');
+        const currentStage = document.getElementById('current-stage');
+        const resultsContainer = document.getElementById('results-container');
+        const analysisAnimation = document.getElementById('analysis-animation');
+        const viewDetailsBtn = document.getElementById('view-details-btn');
+        
+        // Stage icons
+        const stageIcons = {
+            1: document.getElementById('stage1-icon'),
+            2: document.getElementById('stage2-icon'),
+            3: document.getElementById('stage3-icon'),
+            4: document.getElementById('stage4-icon'),
+            5: document.getElementById('stage5-icon')
+        };
+        
+        // Stage results
+        const stageResults = {
+            1: document.getElementById('stage1-result'),
+            2: document.getElementById('stage2-result'),
+            3: document.getElementById('stage3-result'),
+            4: document.getElementById('stage4-result'),
+            5: document.getElementById('stage5-result')
+        };
+        
+        // Result elements
+        const resultAlert = document.getElementById('result-alert');
+        const resultHeading = document.getElementById('result-heading');
+        const resultMessage = document.getElementById('result-message');
+        
+        // Define the stages with their progress percentage and duration
+        const stages = [
+            { 
+                name: "Analyzing domain reputation...", 
+                progress: 20, 
+                duration: 1500, 
+                stageNumber: 1,
+                complete: function(features) {
+                    if (features.whitelisted) {
+                        return {
+                            icon: '<i class="fas fa-check-circle text-info"></i>',
+                            result: '<span class="badge bg-info">Trusted</span>'
+                        };
+                    } else if (features.features.has_suspicious_tld === 1) {
+                        return {
+                            icon: '<i class="fas fa-exclamation-circle text-warning"></i>',
+                            result: '<span class="badge bg-warning">Suspicious</span>'
+                        };
+                    } else {
+                        return {
+                            icon: '<i class="fas fa-check-circle text-success"></i>',
+                            result: '<span class="badge bg-secondary">Neutral</span>'
+                        };
+                    }
+                }
+            },
+            { 
+                name: "Examining URL structure...", 
+                progress: 40, 
+                duration: 1800, 
+                stageNumber: 2,
+                complete: function(features) {
+                    const hasRiskyStructure = 
+                        features.features.has_ip_address === 1 || 
+                        features.features.has_at_symbol === 1 || 
+                        features.features.url_length > 75;
+                    
+                    if (hasRiskyStructure) {
+                        return {
+                            icon: '<i class="fas fa-exclamation-circle text-danger"></i>',
+                            result: '<span class="badge bg-danger">Suspicious</span>'
+                        };
+                    } else {
+                        return {
+                            icon: '<i class="fas fa-check-circle text-success"></i>',
+                            result: '<span class="badge bg-success">Good</span>'
+                        };
+                    }
+                }
+            },
+            { 
+                name: "Checking for suspicious indicators...", 
+                progress: 60, 
+                duration: 2000, 
+                stageNumber: 3,
+                complete: function(features) {
+                    const hasSuspiciousContent = 
+                        features.features.has_suspicious_words === 1 || 
+                        features.features.has_double_slash === 1;
+                    
+                    if (hasSuspiciousContent) {
+                        return {
+                            icon: '<i class="fas fa-exclamation-circle text-danger"></i>',
+                            result: '<span class="badge bg-danger">Suspicious</span>'
+                        };
+                    } else {
+                        return {
+                            icon: '<i class="fas fa-check-circle text-success"></i>',
+                            result: '<span class="badge bg-success">Clear</span>'
+                        };
+                    }
+                }
+            },
+            { 
+                name: "Running AI model analysis...", 
+                progress: 80, 
+                duration: 2500, 
+                stageNumber: 4,
+                complete: function(features) {
+                    if (features.whitelisted) {
+                        return {
+                            icon: '<i class="fas fa-shield-alt text-info"></i>',
+                            result: '<span class="badge bg-info">Bypassed</span>'
+                        };
+                    } else {
+                        const confidencePercent = Math.round(features.confidence * 100);
+                        if (features.is_phishing) {
+                            return {
+                                icon: '<i class="fas fa-exclamation-triangle text-danger"></i>',
+                                result: `<span class="badge bg-danger">${confidencePercent}% Match</span>`
+                            };
+                        } else {
+                            return {
+                                icon: '<i class="fas fa-check-circle text-success"></i>',
+                                result: `<span class="badge bg-success">${100-confidencePercent}% Safe</span>`
+                            };
+                        }
+                    }
+                }
+            },
+            { 
+                name: "Finalizing assessment...", 
+                progress: 100, 
+                duration: 1200, 
+                stageNumber: 5,
+                complete: function(features) {
+                    if (features.whitelisted) {
+                        return {
+                            icon: '<i class="fas fa-shield-alt text-info"></i>',
+                            result: '<span class="badge bg-info">Trusted</span>'
+                        };
+                    } else if (features.is_phishing) {
+                        return {
+                            icon: '<i class="fas fa-exclamation-triangle text-danger"></i>',
+                            result: '<span class="badge bg-danger">Phishing</span>'
+                        };
+                    } else {
+                        return {
+                            icon: '<i class="fas fa-check-circle text-success"></i>',
+                            result: '<span class="badge bg-success">Safe</span>'
+                        };
+                    }
+                }
+            }
+        ];
+        
+        // Function to update progress bar
+        function updateProgress(percent) {
+            progressBar.style.width = percent + '%';
+            progressBar.setAttribute('aria-valuenow', percent);
+            progressBar.textContent = percent + '%';
+        }
+        
+        // Function to update stage
+        function updateStage(stageIndex, animate = true) {
+            const stage = stages[stageIndex];
+            currentStage.textContent = stage.name;
+            
+            if (animate) {
+                // Animate progress to this stage
+                const startPercent = stageIndex > 0 ? stages[stageIndex - 1].progress : 0;
+                const endPercent = stage.progress;
+                const duration = stage.duration;
+                const increment = (endPercent - startPercent) / (duration / 50);
+                
+                let currentPercent = startPercent;
+                
+                // Activate current stage icon
+                for (let i = 1; i <= 5; i++) {
+                    if (i === stage.stageNumber) {
+                        stageIcons[i].innerHTML = '<i class="fas fa-circle-notch fa-spin text-primary"></i>';
+                    } else if (i < stage.stageNumber) {
+                        // Previous stages are completed
+                        stageIcons[i].innerHTML = '<i class="fas fa-check-circle text-success"></i>';
+                    } else {
+                        // Future stages are pending
+                        stageIcons[i].innerHTML = '<i class="fas fa-circle text-secondary"></i>';
+                    }
+                }
+                
+                const progressInterval = setInterval(() => {
+                    currentPercent += increment;
+                    if (currentPercent >= endPercent) {
+                        clearInterval(progressInterval);
+                        currentPercent = endPercent;
+                    }
+                    updateProgress(Math.round(currentPercent));
+                }, 50);
+            } else {
+                // Just set to the final value
+                updateProgress(stage.progress);
+            }
+        }
+        
+        // Start the animation sequence
+        function startAnimation() {
+            // Process URL in the background
+            fetch('/process-url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // We'll use this data to update the stage results
+                // but we'll wait for the animation to complete
+                let stageIndex = 0;
+                updateStage(stageIndex);
+                
+                // Go through each stage with appropriate timing
+                const processStage = () => {
+                    setTimeout(() => {
+                        if (stageIndex < stages.length - 1) {
+                            stageIndex++;
+                            updateStage(stageIndex);
+                            processStage();
+                        } else {
+                            // We're done with all stages, now show the results
+                            setTimeout(() => {
+                                completeAnimation(data);
+                            }, 1000);
+                        }
+                    }, stages[stageIndex].duration);
+                };
+                
+                processStage();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle errors
+                currentStage.textContent = "Error analyzing URL";
+                progressBar.classList.replace('bg-primary', 'bg-danger');
+            });
+        }
+        
+        // Complete the animation and show results
+        function completeAnimation(data) {
+            // Apply the stage results
+            for (let i = 0; i < stages.length; i++) {
+                const stage = stages[i];
+                const stageResult = stage.complete(data);
+                stageIcons[stage.stageNumber].innerHTML = stageResult.icon;
+                stageResults[stage.stageNumber].innerHTML = stageResult.result;
+            }
+            
+            // Show the final result
+            currentStage.textContent = "Analysis complete!";
+            
+            setTimeout(() => {
+                // Hide animation, show results
+                analysisAnimation.style.display = 'none';
+                resultsContainer.style.display = 'block';
+                
+                // Update result message
+                if (data.whitelisted) {
+                    resultAlert.className = 'alert alert-info';
+                    resultHeading.textContent = 'Trusted Domain Detected!';
+                    resultMessage.textContent = 'This URL belongs to a trusted domain on our whitelist and is safe to visit.';
+                } else if (data.is_phishing) {
+                    resultAlert.className = 'alert alert-danger';
+                    resultHeading.textContent = 'Warning: Potential Phishing Detected!';
+                    resultMessage.textContent = 'This URL shows characteristics of a phishing website. Exercise extreme caution.';
+                } else {
+                    resultAlert.className = 'alert alert-success';
+                    resultHeading.textContent = 'URL Appears Safe';
+                    resultMessage.textContent = 'Our analysis didn\'t detect any suspicious indicators in this URL.';
+                }
+                
+                // Setup view details button
+                viewDetailsBtn.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    window.location.href = '/results';
+                });
+            }, 1000);
+        }
+        
+        // Start the animation process
+        startAnimation();
+    });
+</script>
+{% endblock %}

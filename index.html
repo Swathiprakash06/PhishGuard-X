@@ -1,0 +1,166 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-3">Protect yourself from phishing attacks</h1>
+            <p class="lead mb-4">PhishGuard uses a hybrid LSTM and Random Forest model to detect phishing URLs with high accuracy. Enter a URL below to check if it's safe.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a href="#scan-section" class="btn btn-primary btn-lg px-4 me-md-2">Scan URL</a>
+                <a href="{{ url_for('education') }}" class="btn btn-outline-secondary btn-lg px-4">Learn More</a>
+            </div>
+        </div>
+        <div class="col-lg-6 mt-4 mt-lg-0 text-center">
+            <img src="https://media.kasperskycontenthub.com/wp-content/uploads/sites/43/2024/05/27113251/sl-digital-blue-card-theft-online-fraud-1200x667-1-800x450.jpg
+" alt="Cybersecurity Concept" class="img-fluid rounded shadow">
+        </div>
+    </div>
+
+    <!-- Scan Section -->
+    <div id="scan-section" class="row justify-content-center my-5">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">
+                        <i class="fas fa-search me-2"></i>Scan a URL
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('scan') }}" method="post" id="url-form">
+                        <div class="mb-3">
+                            <label for="url" class="form-label">Enter URL to check</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-link"></i></span>
+                                <input type="text" class="form-control" id="url" name="url" 
+                                       placeholder="e.g., example.com or https://example.com" required>
+                                <button type="submit" class="btn btn-primary" id="scan-btn">
+                                    <span id="scan-text">Scan</span>
+                                    <span id="scan-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="form-text">We'll analyze this URL for phishing indicators</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="row my-5">
+        <div class="col-12 text-center mb-4">
+            <h2 class="h2">How PhishGuard Works</h2>
+            <p class="lead">Our advanced hybrid model combines two powerful machine learning techniques</p>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">
+                        <i class="fas fa-brain text-primary me-2"></i>
+                        LSTM Neural Network
+                    </h3>
+                    <p>Long Short-Term Memory (LSTM) networks analyze URL patterns at the character level, capturing sequential information and understanding the structure of phishing URLs.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check-circle text-success me-2"></i>Character pattern recognition</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i>Sequential analysis</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i>Deep learning capabilities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">
+                        <i class="fas fa-tree text-primary me-2"></i>
+                        Random Forest Classifier
+                    </h3>
+                    <p>Random Forest analyzes extracted features from URLs to identify patterns common in phishing sites, using multiple decision trees to make robust predictions.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check-circle text-success me-2"></i>Feature-based analysis</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i>High interpretability</li>
+                        <li><i class="fas fa-check-circle text-success me-2"></i>Resistant to overfitting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Features Section -->
+    <div class="row my-5">
+        <div class="col-12 text-center mb-4">
+            <h2 class="h2">Key Features</h2>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-bolt fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5">High Accuracy</h3>
+                    <p>Our hybrid approach combines the strengths of multiple algorithms for improved detection accuracy.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-bar fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5">Feature Visualization</h3>
+                    <p>See exactly which indicators in the URL triggered a phishing detection.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-code fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5">API Access</h3>
+                    <p>Integrate our phishing detection into your own applications with our simple API.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phishing Warning Section -->
+    <div class="row my-5">
+        <div class="col-12">
+            <div class="card bg-danger text-white shadow">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h2 class="h3">Phishing attacks are on the rise</h2>
+                            <p class="mb-lg-0">Protect yourself and your organization from sophisticated phishing attempts that can steal your sensitive information.</p>
+                        </div>
+                        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                            <a href="{{ url_for('education') }}" class="btn btn-light">Learn how to stay safe</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Handle form submission to show loading spinner
+    document.getElementById('url-form').addEventListener('submit', function() {
+        document.getElementById('scan-text').classList.add('d-none');
+        document.getElementById('scan-spinner').classList.remove('d-none');
+        document.getElementById('scan-btn').disabled = true;
+    });
+</script>
+{% endblock %}
