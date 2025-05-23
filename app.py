@@ -19,6 +19,8 @@ from utils import load_model, save_scan_history
 # Create Flask app
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key")
+from flask_cors import CORS
+CORS(app)
 
 # Load the pre-trained model
 model = load_model()
